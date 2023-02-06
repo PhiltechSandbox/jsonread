@@ -1,0 +1,29 @@
+name: "test"
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: get version
+      id: version
+      uses: ./
+      with: 
+        path: 'package.json'
+        prop_path: 'version'
+    - run: echo ${{steps.version.outputs.prop}}        
+        
+    - name: get nested json property
+      id: get_json_property
+      uses: ./
+      with: 
+        path: 'package.json'
+        prop_path: 'scripts.format'
+
+    - run: echo ${{steps.get_json_property.outputs.prop}}     
